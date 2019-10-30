@@ -65,4 +65,5 @@ if __name__ == "__main__":
     web_crawler = WebCrawler(args.agents)
     found_urls = web_crawler.crawl(args.url, limit=args.limit)
     print(len(found_urls))
-    print(found_urls)
+    for url in found_urls:
+        print(url)

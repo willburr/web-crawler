@@ -36,9 +36,10 @@ class ContentFetcher:
         user_agent = self.get_next_user_agent()
         if user_agent is not None:
             url_request.add_header("User-Agent", user_agent)
+        url_request.add_header("Accept", "text/html")
         try:
-            return request.urlopen(url_request).read().decode("utf-8")
-        except HTTPError:
+            return request.urlopen(url_request).read().decode("utf-8", "ignore")
+        except (HTTPError, URLError, UnicodeDecodeError) as e:
+            print(e)
             return ""
-        except URLError:
-            return ""
+
