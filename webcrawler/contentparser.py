@@ -5,7 +5,8 @@ from typing import List
 class LinkContentParser:
 
     def parse(self, content: str) -> List[str]:
-        html_parser = HTMLLinkParser().feed(content)
+        html_parser = HTMLLinkParser()
+        html_parser.feed(content)
         return html_parser.new_urls
 
 

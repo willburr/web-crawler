@@ -1,7 +1,5 @@
 import argparse
 from typing import List
-from contentfetcher import ContentFetcher
-from contentparser import LinkContentParser
 
 parser = argparse.ArgumentParser(prog='webcrawler')
 parser.add_argument('url',
