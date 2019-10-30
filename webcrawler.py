@@ -1,6 +1,5 @@
 from urllib import request
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlparse
 
 from linkparsers.externallinkparser import ExternalLinkParser
 
