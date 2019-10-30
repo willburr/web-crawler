@@ -1,7 +1,10 @@
 import argparse
 from typing import List
 
-parser = argparse.ArgumentParser(prog='webcrawler')
+from contentfetcher import ContentFetcher
+from contentparser import ContentParser
+
+parser = argparse.ArgumentParser(prog='src')
 parser.add_argument('url',
                     help='URL to start from')
 parser.add_argument('-l', '--limit',
@@ -25,7 +28,7 @@ class WebCrawler:
     """
 
     def __init__(self, user_agents: List[str]):
-        self.content_parser = LinkContentParser()
+        self.content_parser = ContentParser()
         self.content_fetcher = ContentFetcher(user_agents)
 
     def crawl(self, start_url, limit):

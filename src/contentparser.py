@@ -2,7 +2,7 @@ import html.parser
 from typing import List
 
 
-class LinkContentParser:
+class ContentParser:
 
     def parse(self, content: str) -> List[str]:
         html_parser = HTMLLinkParser()
