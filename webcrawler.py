@@ -1,7 +1,12 @@
 from urllib import request
 from urllib.error import HTTPError, URLError
+import argparse
 
 from linkparsers.externallinkparser import ExternalLinkParser
+
+parser = argparse.ArgumentParser(prog='webcrawler')
+parser.add_argument('url', help='URL to start from')
+parser.add_argument('--limit', type=int, help='number of URLs to display', default=50)
 
 
 class WebCrawler:
@@ -39,6 +44,7 @@ class WebCrawler:
 
 
 if __name__ == "__main__":
+    args = parser.parse_args()
     web_crawler = WebCrawler()
-    urls = web_crawler.crawl("", limit=50)
-    print(urls)
+    found_urls = web_crawler.crawl(args.urls, limit=args.limit)
+    print(found_urls)
