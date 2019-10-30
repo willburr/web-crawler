@@ -2,7 +2,7 @@ import argparse
 from typing import List
 
 from contentfetcher import ContentFetcher
-from contentparser import ContentParser
+from contentparsing import extract_urls
 
 parser = argparse.ArgumentParser(prog='src')
 parser.add_argument('url',
@@ -24,7 +24,6 @@ class WebCrawler:
     """
 
     def __init__(self, user_agents: List[str]):
-        self.content_parser = ContentParser()
         self.content_fetcher = ContentFetcher(user_agents)
 
     def crawl(self, start_url, limit):
@@ -34,7 +33,7 @@ class WebCrawler:
         while len(urls) > 0 and count < limit:
             url = urls.pop()
             contents = self.content_fetcher.retrieve_page(url)
-            new_urls = filter(lambda x: x not in seen, self.content_parser.parse(url, contents))
+            new_urls = filter(lambda x: x not in seen, extract_urls(url, contents))
             for new_url in new_urls:
                 if count == limit:
                     break
