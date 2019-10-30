@@ -1,12 +1,19 @@
 import html.parser
+from typing import List
 
 
-class ExternalLinkParser(html.parser.HTMLParser):
+class LinkContentParser:
 
-    def __init__(self, seen):
+    def parse(self, content: str) -> List[str]:
+        html_parser = HTMLLinkParser().feed(content)
+        return html_parser.new_urls
+
+
+class HTMLLinkParser(html.parser.HTMLParser):
+
+    def __init__(self):
         super().__init__()
         self.new_urls = []
-        self.seen = seen
 
     def handle_starttag(self, tag, attrs):
         # Only interested in <a> tags

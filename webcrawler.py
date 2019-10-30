@@ -1,12 +1,24 @@
-from urllib import request
-from urllib.error import HTTPError, URLError
 import argparse
-
-from linkparsers.externallinkparser import ExternalLinkParser
+from typing import List
+from contentfetcher import ContentFetcher
+from contentparser import LinkContentParser
 
 parser = argparse.ArgumentParser(prog='webcrawler')
-parser.add_argument('url', help='URL to start from')
-parser.add_argument('--limit', type=int, help='number of URLs to display', default=50)
+parser.add_argument('url',
+                    help='URL to start from')
+parser.add_argument('-l', '--limit',
+                    type=int,
+                    help='number of URLs to display',
+                    default=50)
+parser.add_argument('-d', '--delay',
+                    type=float,
+                    help='delay in seconds between each request',
+                    default=0)
+parser.add_argument('-ua' '--user-agents',
+                    dest='agents',
+                    nargs='*',
+                    help='user agent(s) to use for requests',
+                    default=[])
 
 
 class WebCrawler:
@@ -14,14 +26,9 @@ class WebCrawler:
     A very simple web crawler
     """
 
-    def retrieve_page(self, url):
-        url_request = request.Request(url)
-        try:
-            return request.urlopen(url_request).read().decode("utf-8")
-        except HTTPError:
-            return ""
-        except URLError:
-            return ""
+    def __init__(self, user_agents: List[str]):
+        self.content_parser = LinkContentParser()
+        self.content_fetcher = ContentFetcher(user_agents)
 
     def crawl(self, start_url, limit):
         urls = [start_url]
@@ -29,10 +36,8 @@ class WebCrawler:
         count = 0
         while len(urls) > 0 and count < limit:
             url = urls.pop()
-            contents = self.retrieve_page(url)
-            parser = ExternalLinkParser(seen)
-            parser.feed(contents)
-            new_urls = parser.new_urls
+            contents = self.content_fetcher.retrieve_page(url)
+            new_urls = self.content_parser.parse(contents)
             index = 0
             while index < len(new_urls) and count < limit:
                 new_url = new_urls[index]
@@ -45,6 +50,6 @@ class WebCrawler:
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    web_crawler = WebCrawler()
-    found_urls = web_crawler.crawl(args.urls, limit=args.limit)
+    web_crawler = WebCrawler(args.agents)
+    found_urls = web_crawler.crawl(args.url, limit=args.limit)
     print(found_urls)
