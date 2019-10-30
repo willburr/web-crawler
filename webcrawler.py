@@ -1,40 +1,9 @@
 from urllib import request
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
-from html.parser import HTMLParser
 
+from linkparsers.externallinkparser import ExternalLinkParser
 
-class LinkTagParser(HTMLParser):
-
-    def __init__(self, scheme, hostname, seen):
-        super().__init__()
-        self.new_urls = []
-        self.scheme = scheme
-        self.hostname = hostname
-        self.seen = seen
-
-    def parse_link(self, link):
-        parse_result = urlparse(link)
-        new_link = parse_result.geturl()
-        if not parse_result.hostname:
-            new_link = self.hostname + parse_result.path
-        self.new_urls.append(new_link)
-
-    def handle_starttag(self, tag, attrs):
-        # Only interested in <a> tags
-        if tag != 'a':
-            return
-        for attr in attrs:
-            if attr[0] == 'href':
-                self.parse_link(attr[1])
-
-
-    def error(self, message):
-        """
-        Handle error
-        :param message:
-        """
-        print(message)
 
 class WebCrawler:
     """
@@ -57,8 +26,7 @@ class WebCrawler:
         while len(urls) > 0 and count < limit:
             url = urls.pop()
             contents = self.retrieve_page(url)
-            parsed_url = urlparse(url)
-            parser = LinkTagParser(parsed_url.scheme, parsed_url.hostname, seen)
+            parser = ExternalLinkParser(seen)
             parser.feed(contents)
             new_urls = parser.new_urls
             index = 0
