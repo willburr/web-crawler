@@ -1,5 +1,4 @@
 from urllib.request import Request, urlopen
-from http.client import HTTPResponse
 from urllib.error import HTTPError, URLError
 from typing import Optional, List, Tuple
 import gzip
