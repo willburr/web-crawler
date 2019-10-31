@@ -64,6 +64,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
     web_crawler = WebCrawler(ContentFetcher(args.agents))
     found_urls = web_crawler.crawl(args.url, limit=args.limit)
-    print(len(found_urls))
     for url in found_urls:
         print(url)
