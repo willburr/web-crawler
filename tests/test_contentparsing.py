@@ -4,16 +4,20 @@ from contentparsing import extract_urls
 
 
 class TestContentParsing(unittest.TestCase):
-
     origin_url = "https://crawler-test.com/"
     html_no_link = "<!DOCTYPE html><html><body><h1>Some header</h1><p>Some text</p></body></html>"
     html_link_in_text = "<!DOCTYPE html><html><body><h1>https://crawler-test.com/</h1><p>Some text</p></body></html>"
     html_relative_link_in_tag = "<!DOCTYPE html><html><body><h1>Some header/</h1><p>Some text</p>" \
-                       "<a href='/hello.txt'></a>" \
-                       "</body></html>"
+                                "<a href='/hello.txt'></a>" \
+                                "</body></html>"
     html_absolute_link_in_tag = "<!DOCTYPE html><html><body><h1>Some header</h1><p>Some text</p>" \
                                 "<a href='https://crawler-test.com'></a>" \
                                 "</body></html>"
+
+    html_both_links_in_tags = "<!DOCTYPE html><html><body><h1>Some header</h1><p>Some text</p>" \
+                              "<a href='https://crawler-test.com'></a>" \
+                              "<a href='/hello.txt'></a>" \
+                              "</body></html>"
 
     def test_extract_links_finds_no_links_when_not_present(self):
         self.assertEqual(extract_urls(self.origin_url, self.html_no_link), [])
@@ -29,3 +33,6 @@ class TestContentParsing(unittest.TestCase):
         self.assertEqual(extract_urls(self.origin_url, self.html_absolute_link_in_tag),
                          ["https://crawler-test.com"])
 
+    def test_extract_links_finds_all_links_in_atags(self):
+        self.assertEqual(extract_urls(self.origin_url, self.html_both_links_in_tags),
+                         ["https://crawler-test.com", "https://crawler-test.com/hello.txt"])

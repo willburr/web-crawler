@@ -5,13 +5,16 @@ from urllib.parse import urljoin, urlparse, urlsplit
 def is_http_url(url: str) -> bool:
     """
     Returns true if the URL is considered to be an absolute url with a http or https prefix.
-    Uses a simple regex check on the start of the url.
+    Uses a simple regex check on the start of the url. Then check the rest of the structure
+    using urlparse.
     :param url: url to check
     :return: a boolean
     """
     http_regex = 'https?://'
     http_pattern = re.compile(http_regex)
-    return http_pattern.search(url, 0, len(http_regex) - 1) is not None
+    if http_pattern.search(url, 0, len(http_regex) - 1) is None:
+        return False
+    return urlparse(url).netloc != ''
 
 
 def is_relative_url(url: str) -> bool:

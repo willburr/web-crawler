@@ -33,10 +33,10 @@ class WebCrawler:
     A very simple web crawler
     """
 
-    def __init__(self, user_agents: List[str]):
-        self.content_fetcher = ContentFetcher(user_agents)
+    def __init__(self, content_fetcher: ContentFetcher):
+        self.content_fetcher = content_fetcher
 
-    def crawl(self, start_url, limit):
+    def crawl(self, start_url: str, limit: int) -> List[str]:
         """
         Crawl through
         :param start_url:
@@ -62,7 +62,7 @@ class WebCrawler:
 if __name__ == "__main__":
     parser = setup_argument_parser()
     args = parser.parse_args()
-    web_crawler = WebCrawler(args.agents)
+    web_crawler = WebCrawler(ContentFetcher(args.agents))
     found_urls = web_crawler.crawl(args.url, limit=args.limit)
     print(len(found_urls))
     for url in found_urls:
