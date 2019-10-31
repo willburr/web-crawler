@@ -6,11 +6,11 @@ from contentfetcher import ContentFetcher
 
 
 class TestContentFetcher(unittest.TestCase):
-    test_user_agents = ["Mozilla", "Python", "Something Else"]
-    test_url = "https://crawler-test.com/"
+    user_agents = ["Mozilla", "Python", "Something Else"]
+    url = "https://crawler-test.com/"
 
     def setUp(self) -> None:
-        self.content_fetcher = ContentFetcher(self.test_user_agents)
+        self.content_fetcher = ContentFetcher(self.user_agents)
 
     def test_get_next_user_agent_cycles_through_agents(self):
         self.assertEqual(self.content_fetcher.get_next_user_agent(), "Mozilla")
@@ -23,10 +23,10 @@ class TestContentFetcher(unittest.TestCase):
         self.assertIsNone(content_fetcher_no_agents.get_next_user_agent())
 
     def test_construct_request_adds_correct_headers(self):
-        request = self.content_fetcher.construct_request(self.test_url)
+        request = self.content_fetcher.construct_request(self.url)
         self.assertEqual(request.get_header("User-agent"), "Mozilla")
         self.assertEqual(request.get_header("Accept-encoding"), "gzip, deflate")
-        self.assertEqual(request.get_full_url(), self.test_url)
+        self.assertEqual(request.get_full_url(), self.url)
         self.assertEqual(request.get_header("Accept"), "text/html")
 
     def test_decompress_content_handles_gzip(self):
