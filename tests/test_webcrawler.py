@@ -21,3 +21,7 @@ class TestWebCrawler(unittest.TestCase):
     def test_crawl_does_not_return_duplicate_links(self):
         urls = self.web_crawler.crawl("http://some_link.com", limit=10)
         self.assertEqual(urls, ["http://some_link.com", "http://some_link2.com"])
+
+    def test_crawl_does_not_give_more_links_than_the_limit(self):
+        urls = self.web_crawler.crawl("http://some_link.com", limit=1)
+        self.assertEqual(urls, ["http://some_link.com"])
