@@ -10,6 +10,6 @@ Upon cloning this project it is possible to run the web crawler instantly using:
 
 ### Options
 
-`webcrawler` provides the following options:
+`webcrawler` provides the following options which are not required:
 * `-l` `--limit`: the maximum number of URLs to display
 * `-ua` `--user-agents`: strings to use as User-Agent header in request
