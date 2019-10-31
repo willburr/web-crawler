@@ -1,7 +1,7 @@
 from urllib.request import Request, urlopen
 from http.client import HTTPResponse
 from urllib.error import HTTPError, URLError
-from typing import Optional, List
+from typing import Optional, List, Tuple
 import gzip
 import zlib
 
@@ -12,7 +12,10 @@ def decompress_gzip(content: bytes) -> bytes:
     :param content: content to decompress
     :return:
     """
-    return gzip.decompress(content)
+    try:
+        return gzip.decompress(content)
+    except OSError:
+        return b''
 
 
 def decompress_deflate(content: bytes) -> bytes:
@@ -73,7 +76,7 @@ class ContentFetcher:
         request = self.construct_request(url)
         try:
             response = urlopen(request)
-            return self.handle_response(response)
+            return self.handle_response(response.getheaders(), response.read())
         except (HTTPError, URLError) as e:
             print(e)
             return ""
@@ -92,14 +95,16 @@ class ContentFetcher:
         url_request.add_header("Accept-Encoding", "gzip, deflate")
         return url_request
 
-    def handle_response(self, response: HTTPResponse) -> str:
+    def handle_response(self, headers: List[Tuple], content: bytes) -> str:
         """
         Handle the HTTP response, including any encoding and compression
-        :param response: a HTTP response object received from a web site
+        :param headers: list of tuples representing the response headers
+        :param content: bytes of content
         :return: string containing the decoded, decompressed page contents
         """
-        content = response.read()
-        encoding = response.getheader("Content-Encoding")
-        if encoding is not None:
-            content = self.decompress_content(content, encoding)
+        for header in headers:
+            if header[0] == "Content-Encoding":
+                encoding = header[1]
+                if encoding is not None:
+                    content = self.decompress_content(content, encoding)
         return content.decode("utf-8", "ignore")
