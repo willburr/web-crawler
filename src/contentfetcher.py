@@ -7,7 +7,7 @@ import zlib
 
 def decompress_gzip(content: bytes) -> bytes:
     """
-    Decompress content compressed with gzip
+    Decompress content compressed with gzip.
     :param content: content to decompress
     :return:
     """
@@ -19,7 +19,7 @@ def decompress_gzip(content: bytes) -> bytes:
 
 def decompress_deflate(content: bytes) -> bytes:
     """
-    Decompress content compressed with deflate
+    Decompress content compressed with deflate.
     :param content: content to decompress
     :return:
     """
@@ -38,7 +38,7 @@ class ContentFetcher:
 
     def __init__(self, user_agents: List[str]):
         """
-        :param user_agents: list of user agent strings to cycle through for request headers
+        :param user_agents: list of user agent strings to cycle through for request headers.
         """
         self.user_agents = user_agents
         self.user_agent_index = 0
@@ -82,7 +82,7 @@ class ContentFetcher:
 
     def construct_request(self, url: str) -> Request:
         """
-        Build the HTTP request for the URL given
+        Build the HTTP request for the URL given.
         :param url: url to request as a string
         :return: an urllib Request object
         """
@@ -96,7 +96,7 @@ class ContentFetcher:
 
     def handle_response(self, headers: List[Tuple], content: bytes) -> str:
         """
-        Handle the HTTP response, including any encoding and compression
+        Handle the HTTP response, including any encoding and compression.
         :param headers: list of tuples representing the response headers
         :param content: bytes of content
         :return: string containing the decoded, decompressed page contents

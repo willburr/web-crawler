@@ -6,6 +6,7 @@ from urlhandling import *
 
 def extract_urls(origin_url: str, content: str) -> List[str]:
     """
+    Extract the urls from within the content that was retrieved from origin url.
     :param origin_url: url from which the content was fetched from
     :param content: content to parse
     :return: list of unique urls identified within the content
@@ -33,7 +34,7 @@ class HTMLLinkParser(html.parser.HTMLParser):
 
     def process_link(self, link: str):
         """
-        Converts link to an absolute (HTTP) URL if possible
+        Converts link to an absolute (HTTP) URL if possible.
         :param link: link identified within tag
         """
         if is_http_url(link):
