@@ -16,6 +16,7 @@ def setup_argument_parser():
                             help='URL to start from')
     # User may provide a limit on how many URLs to see
     arg_parser.add_argument('-l', '--limit',
+                            dest='limit',
                             type=int,
                             help='number of URLs to display, 100 by default',
                             default=100)
